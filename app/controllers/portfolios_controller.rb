@@ -1,8 +1,8 @@
 class PortfoliosController < ApplicationController
-  layout 'portfolio'
   before_action :set_portfolio_item, only: [:edit, :show, :update, :destroy]
-    access all: [:show, :index, :angular], user: {except: [:destroy, :new, :create, :update, :edit, :sort]}, site_admin: :all
-
+  layout 'portfolio'
+  access all: [:show, :index, :angular], user: {except: [:destroy, :new, :create, :update, :edit, :sort]}, site_admin: :all
+  
   
   def index
     @portfolio_items = Portfolio.by_position
@@ -27,8 +27,8 @@ class PortfoliosController < ApplicationController
   end
   
   def create
-    
     @portfolio_item = Portfolio.new(portfolio_params)
+    # binding.py
     respond_to do |format|
       if @portfolio_item.save
         format.html { redirect_to portfolios_path, notice: 'Your portfolio item is now live.' }
@@ -73,17 +73,19 @@ class PortfoliosController < ApplicationController
   
   private
   
-  def set_portfolio_item
-    @portfolio_item = Portfolio.find(params[:id])
-  end
+      def set_portfolio_item
+        @portfolio_item = Portfolio.find(params[:id])
+      end
 
-  def portfolio_params
-    params.require(:portfolio).permit(:title,
+      def portfolio_params
+        params.require(:portfolio).permit(:title,
                                       :subtitle,
                                       :body,
+                                      :main_image,
+                                      :thumb_image,
                                       technologies_attributes: [:name]
                                      )
-  end
+      end
 
   
  
