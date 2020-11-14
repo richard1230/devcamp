@@ -6,7 +6,7 @@ class BlogsController < ApplicationController
   # GET /blogs.json
   def index
     
-    # if logged_in?(:site_admin)==>这才是真正的
+    # if logged_in?(:site_admin)==>这才是真正的，由于不知如何成为admin,这里写成了下面的
     if logged_in?(:user)
       @blogs = Blog.recent.page(params[:page]).per(5)
     else
@@ -18,10 +18,16 @@ class BlogsController < ApplicationController
   # GET /blogs/1 
   # GET /blogs/1.json
   def show
-    @blog = Blog.includes(:comments).friendly.find(params[:id])
-    @comment = Comment.new
-    @page_title = @blog.title
-    @seo_keywords = @blog.body
+    #下面是真正的，由于不知如何成为admin,这里写成了下面的user
+    # if logged_in?(:site_admin) || @blog.published?
+    if logged_in?(:user) || @blog.published?
+      @blog = Blog.includes(:comments).friendly.find(params[:id])
+      @comment = Comment.new
+      @page_title = @blog.title
+      @seo_keywords = @blog.body
+    else
+      redirect_to blogs_path, notice: "You are not authorized to access this page"
+    end
   end
 
   # GET /blogs/new
