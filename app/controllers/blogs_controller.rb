@@ -1,5 +1,6 @@
 class BlogsController < ApplicationController
   before_action :set_sidebar_topics, except: [:update, :create, :destroy, :toggle_status]
+  before_action :set_blog, only: [:show, :edit, :update, :destroy, :toggle_status]
   access all: [:show, :index], user: :all, site_admin: :all  
   layout "blog"
   # GET /blogs
@@ -79,6 +80,8 @@ class BlogsController < ApplicationController
     end
   end
   
+  
+  
   def toggle_status
     if @blog.draft?
       @blog.published!
@@ -98,7 +101,8 @@ class BlogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def blog_params
-      params.require(:blog).permit(:title, :body, :topic_id)
+      
+      params.require(:blog).permit(:title, :body, :topic_id, :status)
     end
     
     def set_sidebar_topics
